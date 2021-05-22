@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Frontend;
 
 use App\Http\Controllers\Controller;
+use App\models\Task;
 use Illuminate\Http\Request;
 
 class TaskController extends Controller
@@ -14,24 +15,8 @@ class TaskController extends Controller
      */
     public function index()
     {
-        $list = [
-            [
-                'id' => 1,
-                'name' => 'Học View trong Laravel',
-                'status' => 0
-            ],
-            [
-                'id' => 2,
-                'name' => 'Học Route trong Laravel',
-                'status' => 1
-            ],
-            [
-                'id' => 3,
-                'name' => 'Làm bài tập View trong Laravel',
-                'status' => -1
-            ],
-        ];
-        return view('tasks.index3');
+        $tasks = Task::where('status', 1)->orderBy('created_at', 'desc')->get();
+        return view('tasks.index3',['tasks' => $tasks]);
     }
 
     /**
@@ -52,14 +37,21 @@ class TaskController extends Controller
      */
     public function store(Request $request)
     {
-        // $name = $request->get('name');
+         $name = $request->get('name');
         // echo $name;
         // $all = $request->all();
 
-        $all = $request->only(['name', 'deadline']);
+        // $all = $request->only(['name', 'deadline']);
 
         // $all = $request->except('_token');
-        var_dump($all);
+        // var_dump($all);
+
+        $task = new Task();
+        $task->name = $name;
+        $task->status = 1;
+        $task->deadline = '2019-12-17 23:00:00';
+        $task->save();
+        return redirect()->route('task.index');
         
     }
 

@@ -32,13 +32,13 @@
                             <input type="text" name="name" id="task-name" class="form-control" value="{{ old('task') }}">
                         </div>
                     </div>
-                    <div class="form-group">
+                    <!-- <div class="form-group">
                         <label for="task-name" class="col-sm-3 control-label">deadline</label>
 
                         <div class="col-sm-6">
                             <input type="text" name="deadline" id="task-name" class="form-control" value="{{ old('task') }}">
                         </div>
-                    </div>
+                    </div> -->
 
                     <!-- Add Task Button -->
                     <div class="form-group">
@@ -66,7 +66,7 @@
                     </thead>
                     <tbody>
                     <tr>
-                    @forelse( $list as $row)
+                    @forelse( $tasks as $row)
                         <td class="table-text"><div>{{ $row['name'] }} </div></td>
                         <!-- Task Complete Button -->
                         @if($row['status'] == 0 )                       
@@ -93,7 +93,7 @@
                             <form action="{{ route('task.destroy', 1)}}" method="POST">
                                 {{ csrf_field() }}
                                 {{ method_field('DELETE') }}
-                                <input type="hidden" name="id" value="{{ $row['id'] }}">
+                                <!-- <input type="hidden" name="id" value="{{ $row['id'] }}"> -->
                                 <button type="submit" class="btn btn-danger">
                                     <i class="fa fa-btn fa-trash"></i>Xoá
                                 </button>
@@ -116,7 +116,7 @@
                             <form action="{{ route('task.destroy', 1) }}" method="POST">
                                 {{ csrf_field() }}
                                 {{ method_field('DELETE') }}
-                                <input type="hidden" name="id" value="{{ $row['id'] }}">
+                                <!-- <input type="hidden" name="id" value="{{ $row['id'] }}"> -->
                                 <button type="submit" class="btn btn-danger">
                                     <i class="fa fa-btn fa-trash"></i>Xoá
                                 </button>
