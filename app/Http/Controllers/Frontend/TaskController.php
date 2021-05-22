@@ -37,19 +37,20 @@ class TaskController extends Controller
      */
     public function store(Request $request)
     {
-         $name = $request->get('name');
+         $data = $request->all();
         // echo $name;
         // $all = $request->all();
 
         // $all = $request->only(['name', 'deadline']);
 
         // $all = $request->except('_token');
-        // var_dump($all);
+        //echo $data['name'];
 
         $task = new Task();
-        $task->name = $name;
+        $task->name = $data['name'];
+        $task->content = $data['content'];
         $task->status = 1;
-        $task->deadline = '2019-12-17 23:00:00';
+        $task->deadline = $data['deadline'];
         $task->save();
         return redirect()->route('task.index');
         
@@ -95,10 +96,11 @@ class TaskController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Request $request)
+    public function destroy($id)
     {
-        $all = $request->only(['id']);
-         dd($all);
+        $task = Task::findOrFail($id);
+        $task->delete();
+        return redirect()->route('task.index');
     }
 
 

@@ -29,16 +29,23 @@
                         <label for="task-name" class="col-sm-3 control-label">Tên công việc</label>
 
                         <div class="col-sm-6">
-                            <input type="text" name="name" id="task-name" class="form-control" value="{{ old('task') }}">
+                            <input type="text" name="name" id="task-name" class="form-control" value="">
                         </div>
                     </div>
-                    <!-- <div class="form-group">
-                        <label for="task-name" class="col-sm-3 control-label">deadline</label>
+                    <div class="form-group">
+                        <label for="task-name" class="col-sm-3 control-label">Content:</label>
 
                         <div class="col-sm-6">
-                            <input type="text" name="deadline" id="task-name" class="form-control" value="{{ old('task') }}">
+                        <textarea name="content" id="task-name" class="form-control" cols="30" rows="10" ></textarea>
                         </div>
-                    </div> -->
+                    </div>
+                    <div class="form-group">
+                        <label for="task-name" class="col-sm-3 control-label">Deadline</label>
+
+                        <div class="col-sm-6">
+                            <input type="datetime" name="deadline" id="task-name" class="form-control" value="">
+                        </div>
+                    </div>
 
                     <!-- Add Task Button -->
                     <div class="form-group">
@@ -62,19 +69,29 @@
                 <table class="table table-striped task-table">
                     <thead>
                     <th>Tên công việc</th>
+                    <th>Nội dung</th>
+                    <th>Hạn hoàn thành</th>
+                    <th>Trạng thái</th>
+                    <th>Xóa</th>
                     <th>&nbsp;</th>
                     </thead>
                     <tbody>
-                    <tr>
                     @forelse( $tasks as $row)
-                        <td class="table-text"><div>{{ $row['name'] }} </div></td>
+                    <tr>
+                        <td class="table-text"><div>{{ $row->name }} </div></td>
                         <!-- Task Complete Button -->
+                                          
+                        <td class="table-text"><div>{{ $row['content'] }} </div></td>
+                        
+                        <td class="table-text"><div>{{ $row['deadline'] }} </div></td>
+
                         @if($row['status'] == 0 )                       
                         <td>
                             <a href="{{ route('task.reComplete', 1) }}" type="submit" class="btn btn-success">
                                 <i class="fa fa-btn "></i>Chưa Làm
                             </a>
                         </td>
+                        
                         @elseif($row['status'] ==1 )
                         <td>
                             <a href="{{ route('task.complete', 1) }}" type="submit" class="btn btn-success">
@@ -90,7 +107,7 @@
                         @endif
                         <!-- Task Delete Button -->
                         <td>
-                            <form action="{{ route('task.destroy', 1)}}" method="POST">
+                            <form action="/task/destroy/{{$row->id}}" method="POST">
                                 {{ csrf_field() }}
                                 {{ method_field('DELETE') }}
                                 <!-- <input type="hidden" name="id" value="{{ $row['id'] }}"> -->
@@ -100,28 +117,12 @@
                             </form>
                         </td>
                     </tr>
-                    @empty 
-                không có công việc
-            @endforelse
+                    @empty
+                <h1>Không có công việc</h1>
+            
                     <tr>
-                        <td class="table-text"><div><strike>Làm project Laravel </strike></div></td>
-                        <!-- Task Complete Button -->
-                        <td>
-                            <a href="{{ route('task.reComplete', 1) }}" type="submit" class="btn btn-success">
-                                <i class="fa fa-btn fa-refresh"></i>Làm lại
-                            </a>
-                        </td>
-                        <!-- Task Delete Button -->
-                        <td>
-                            <form action="{{ route('task.destroy', 1) }}" method="POST">
-                                {{ csrf_field() }}
-                                {{ method_field('DELETE') }}
-                                <!-- <input type="hidden" name="id" value="{{ $row['id'] }}"> -->
-                                <button type="submit" class="btn btn-danger">
-                                    <i class="fa fa-btn fa-trash"></i>Xoá
-                                </button>
-                            </form>
-                        </td>
+                    @endforelse
+                        
                     </tr>
                     </tbody>
                 </table>
