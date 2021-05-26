@@ -5,11 +5,7 @@
 @section('script')
     @include('layouts.script')
 @endsection
-
-
-
 @section('content')
-
 <div class="container">
     <div class="col-sm-offset-2 col-sm-8">
         <div class="panel panel-default">
@@ -33,22 +29,10 @@
                         </div>
                     </div>
                     <div class="form-group">
-                        <label for="task-name" class="col-sm-3 control-label">Nội dung:</label>
+                        <label for="task-name" class="col-sm-3 control-label">Content:</label>
 
                         <div class="col-sm-6">
-                        <textarea name="content" id="editor-task" class="form-control" cols="30" rows="10" ></textarea>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label for="task-name" class="col-sm-3 control-label">Mức độ ưu tiên:</label>
-
-                        <div class="col-sm-6">
-                            <select name="priority" id="">
-                                <option value="0">Bình thường</option>
-                                <option value="1">Quan trọng</option>
-                                <option value="2">Khẩn cấp</option>
-                                
-                            </select>
+                        <textarea name="content" id="task-name" class="form-control" cols="30" rows="10" ></textarea>
                         </div>
                     </div>
                     <div class="form-group">
@@ -84,51 +68,40 @@
                     <th>Nội dung</th>
                     <th>Hạn hoàn thành</th>
                     <th>Trạng thái</th>
-                    <th>Mức độ ưu tiên</th>
-                    <th>Sửa</th>
                     <th>Xóa</th>
                     <th>&nbsp;</th>
                     </thead>
                     <tbody>
                     @forelse( $tasks as $row)
                     <tr>
-                        <td class="table-text"><div> <a href="{{route('task.show', $row->id)}}" target="_blink"> {{ $row->name }} </a> </div></td>
+                        <td class="table-text"><div>{{ $row->name }} </div></td>
                         <!-- Task Complete Button -->
                                           
-                        <td class="table-text"><div>{!! $row['content'] !!} </div></td>
+                        <td class="table-text"><div>{{ $row['content'] }} </div></td>
                         
                         <td class="table-text"><div>{{ $row['deadline'] }} </div></td>
 
-                        @if($row['status'] == 1 )
+                        @if($row['status'] == 0 )                       
                         <td>
-                            <a href="/task/complete/{{$row->id}}" type="submit" class="btn btn-success">
-                                Hoàn thành
+                            <a href="{{ route('task.reComplete', 1) }}" type="submit" class="btn btn-success">
+                                <i class="fa fa-btn "></i>Chưa Làm
+                            </a>
+                        </td>
+                        
+                        @elseif($row['status'] ==1 )
+                        <td>
+                            <a href="{{ route('task.complete', 1) }}" type="submit" class="btn btn-success">
+                                <i class="fa fa-btn fa-check"></i>Hoàn thành
                             </a>
                         </td>
                         @else
                         <td>
-                            <a href="/task/reComplete/{{$row->id}}" type="submit" class="btn btn-success">
-                                <i class="fa fa-btn fa-refresh"> </i>Làm lại
+                            <a href="{{ route('task.reComplete', 1) }}" type="submit" class="btn btn-success">
+                                <i class="fa fa-btn"></i>Không thực hiện
                             </a>
                         </td>
                         @endif
                         <!-- Task Delete Button -->
-                        @if ($row['priority'] == 0)
-                        <td class="table-text"><div>Bình thường </div></td>
-                            
-                        @elseif($row['priority'] == 1)
-                        <td class="table-text"><div>Quan trọng </div></td>
-                        @else
-                        <td class="table-text"><div>Khẩn cấp</div></td>
-                            
-                        @endif
-                        <td>
-                            
-                                <a href="{{route('task.edit',$row->id)}}"><button type="submit" class="btn btn-danger">
-                                    Chỉnh sửa
-                                </button></a>
-                            
-                        </td>
                         <td>
                             <form action="/task/destroy/{{$row->id}}" method="POST">
                                 {{ csrf_field() }}

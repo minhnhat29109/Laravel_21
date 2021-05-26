@@ -24,7 +24,7 @@
 </div>
 <!-- JavaScripts -->
 
-@yield('css')
+@yield('script')
 
 
 </body>

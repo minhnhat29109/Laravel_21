@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Frontend;
 
 use App\Http\Controllers\Controller;
 use App\models\Task;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 
 class TaskController extends Controller
@@ -15,7 +16,7 @@ class TaskController extends Controller
      */
     public function index()
     {
-        $tasks = Task::where('status', 1)->orderBy('created_at', 'desc')->get();
+        $tasks = Task::orderBy('created_at', 'desc')->get();
         return view('tasks.index3',['tasks' => $tasks]);
     }
 
@@ -37,7 +38,7 @@ class TaskController extends Controller
      */
     public function store(Request $request)
     {
-         $data = $request->all();
+         $data = $request->except('_token');
         // echo $name;
         // $all = $request->all();
 
@@ -46,13 +47,20 @@ class TaskController extends Controller
         // $all = $request->except('_token');
         //echo $data['name'];
 
-        $task = new Task();
-        $task->name = $data['name'];
-        $task->content = $data['content'];
-        $task->status = 1;
-        $task->deadline = $data['deadline'];
-        $task->save();
-        return redirect()->route('task.index');
+        // $task = new Task();
+        // $task->name = $data['name'];
+        // $task->content = $data['content'];
+        // $task->status = 1;
+        // $task->deadline = $data['deadline'];
+        // $task->save();
+        $data['status']= Task::STATUS['display'];
+        $success =  Task::create($data);
+
+        if($success){
+            
+            return redirect()->route('task.index');
+            
+        }
         
     }
 
@@ -64,7 +72,10 @@ class TaskController extends Controller
      */
     public function show($id)
     {
-        echo 'Day la ham show';
+        $task = Task::find($id);
+        return view('tasks.show')->with([
+            'task' => $task
+        ]);
     }
 
     /**
@@ -75,7 +86,10 @@ class TaskController extends Controller
      */
     public function edit($id)
     {
-        //
+        $task = Task::find($id);
+        return view('tasks.edit')->with([
+            'task' => $task
+        ]);
     }
 
     /**
@@ -87,7 +101,21 @@ class TaskController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+
+        $data = $request->except('_token');
+        // Lấy dữ liệu từ Form
+        // $name = $request->get('name');
+        // $deadline = $request->get('deadline');
+        // $content = $request->get('content');
+        // // Cập nhật
+        // $task = Task::find($id);
+        // $task->name = $name;
+        // $task->status = 1;
+        // $task->content = $content;
+        // $task->deadline = $deadline;
+        // $task->save();
+        Task::where('id', $id)->update(['name'=>$data['name'], 'content'=>$data['content'],'deadline'=>$data['deadline'],'priority'=>$data['priority'] ]);
+        return redirect()->route('task.index');
     }
 
     /**
@@ -106,11 +134,14 @@ class TaskController extends Controller
 
     public function complete($id)
     {
-        echo 'Đây là hàm complete';
+        Task::where('id', $id)->update(['status' => 2]);
+        return redirect()->route('task.index');
+        
     }
 
     public function reComplete($id)
     {
-        echo 'Đây là hàm reComplete';
+        Task::where('id', $id)->update(['status' => 1]);
+        return redirect()->route('task.index');
     }
 }

@@ -1,10 +1,4 @@
-@extends('layouts.master') 
-@section('css')
-    @include('layouts.css')
-@endsection
-@section('script')
-    @include('layouts.script')
-@endsection
+@extends('.layouts.master')
 @section('content')
     <div class="col-sm-offset-2 col-sm-8">
         <div class="panel panel-default">
@@ -31,21 +25,14 @@
                         <label for="task-name" class="col-sm-3 control-label">Mô tả</label>
 
                         <div class="col-sm-6">
-                            <textarea name="content" class="form-control">{!! $task['content'] !!}</textarea>
+                            <textarea name="content" class="form-control">{!! $row['content'] !!}</textarea>
                         </div>
                     </div>
                     <div class="form-group">
                         <label for="task-name" class="col-sm-3 control-label">Mức độ ưu tiên:</label>
 
                         <div class="col-sm-6">
-                            <select name="priority" id="" class="form-control">
-                                @if ($task->priority == 0)
-                                    <option value="0">Bình thường</option>
-                                @elseif($task->priority == 1)
-                                    <option value="1">Quan trọng</option>
-                                @else
-                                    <option value="2">Khẩn cấp</option>
-                                @endif
+                            <select name="priority" id="">
                                 <option value="0">Bình thường</option>
                                 <option value="1">Quan trọng</option>
                                 <option value="2">Khẩn cấp</option>
